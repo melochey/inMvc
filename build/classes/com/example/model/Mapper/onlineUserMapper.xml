@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="onlineUser">
+  <resultMap id="BaseResultMap" type="com.example.model.onlineUser">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="fm_id" jdbcType="INTEGER" property="fmId" />
+    <result column="category" jdbcType="VARCHAR" property="category" />
+    <result column="online" jdbcType="INTEGER" property="online" />
+    <result column="ontotal" jdbcType="INTEGER" property="ontotal" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, fm_id, category, online, ontotal, create_time
+  </sql>
+  <select id="find" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from onlineuser
+     where 1=1
+    <if test="params.fmid!=null">
+    	and fm_id=#{params.fmid}
+    </if>
+    <if test="params.categoryid!=null">
+    	and category=#{params.categoryid}
+    </if>
+  </select>
+  <delete id="del" parameterType="java.lang.Integer">
+    delete from onlineuser
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="ist" parameterType="com.example.model.onlineUser">
+    insert into onlineuser (id, fm_id, category, 
+      online, ontotal, create_time
+      )
+    values (#{id,jdbcType=INTEGER}, #{fmId,jdbcType=INTEGER}, #{category,jdbcType=VARCHAR}, 
+      #{online,jdbcType=INTEGER}, #{ontotal,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.example.model.onlineUser">
+    insert into onlineuser
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="fmId != null">
+        fm_id,
+      </if>
+      <if test="category != null">
+        category,
+      </if>
+      <if test="online != null">
+        online,
+      </if>
+      <if test="ontotal != null">
+        ontotal,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="fmId != null">
+        #{fmId,jdbcType=INTEGER},
+      </if>
+      <if test="category != null">
+        #{category,jdbcType=VARCHAR},
+      </if>
+      <if test="online != null">
+        #{online,jdbcType=INTEGER},
+      </if>
+      <if test="ontotal != null">
+        #{ontotal,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.example.model.onlineUser">
+    update onlineuser
+    <set>
+      <if test="fmId != null">
+        fm_id = #{fmId,jdbcType=INTEGER},
+      </if>
+      <if test="category != null">
+        category = #{category,jdbcType=VARCHAR},
+      </if>
+      <if test="online != null">
+        online = #{online,jdbcType=INTEGER},
+      </if>
+      <if test="ontotal != null">
+        ontotal = #{ontotal,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.example.model.onlineUser">
+    update onlineuser
+    set fm_id = #{fmId,jdbcType=INTEGER},
+      category = #{category,jdbcType=VARCHAR},
+      online = #{online,jdbcType=INTEGER},
+      ontotal = #{ontotal,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

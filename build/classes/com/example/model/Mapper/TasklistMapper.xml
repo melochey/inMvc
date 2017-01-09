@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="Tasklist" >
+  <resultMap id="RM_Tasklist" type="com.example.model.Tasklist" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="fmid" property="fmid" jdbcType="INTEGER" />
+    <result column="finished" property="finished" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="bite" property="bite" jdbcType="INTEGER" />
+    <result column="url" property="url" jdbcType="VARCHAR" />
+    <result column="isdelete" property="isdelete" jdbcType="INTEGER" />
+    <result column="categoryid" property="categoryid" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, fmid, finished, create_time, bite, url, isdelete, categoryid
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="RM_Tasklist" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from tasklist
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  	<select id="find" parameterType="com.example.model.Page"
+		resultMap="RM_Tasklist">
+		select * from tasklist where isdelete=0
+		<if test="params.id!=null and params.id!=''">
+		   and id=#{params.id}
+		</if>
+		<if test="params.fmid!=null and params.fmid!=''">
+		   and fmid=#{params.fmid}
+		</if>
+		<if test="params.isdelete!=null and params.isdelete!=''">
+		   and isdelete=#{params.isdelete}
+		</if>
+		<if test="params.finished!=null and params.finished!=''">
+		   and finished=#{params.finished}
+		</if>
+		<if test="params.categoryid!=null and params.categoryid!=''">
+		   and categoryid=#{params.categoryid}
+		</if>
+		<if test="params.createtime!=null">
+			and create_time &lt;=#{params.createtime}
+		</if>
+		order by create_time desc
+	</select>
+	<select id="allfm"  resultType="String">
+		SELECT DISTINCT(fmid) FROM tasklist
+		where isdelete =0
+		 ORDER BY create_time desc
+	</select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from tasklist
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="ist" parameterType="com.example.model.Tasklist" >
+    insert into tasklist (id, fmid, finished, 
+      create_time, bite, url, 
+      isdelete, categoryid)
+    values (#{id,jdbcType=INTEGER}, #{fmid,jdbcType=INTEGER}, #{finished,jdbcType=INTEGER}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{bite,jdbcType=INTEGER}, #{url,jdbcType=VARCHAR}, 
+      #{isdelete,jdbcType=INTEGER}, #{categoryid,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.example.model.Tasklist" >
+    insert into tasklist
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="fmid != null" >
+        fmid,
+      </if>
+      <if test="finished != null" >
+        finished,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="bite != null" >
+        bite,
+      </if>
+      <if test="url != null" >
+        url,
+      </if>
+      <if test="isdelete != null" >
+        isdelete,
+      </if>
+      <if test="categoryid != null" >
+        categoryid,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="fmid != null" >
+        #{fmid,jdbcType=INTEGER},
+      </if>
+      <if test="finished != null" >
+        #{finished,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="bite != null" >
+        #{bite,jdbcType=INTEGER},
+      </if>
+      <if test="url != null" >
+        #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="isdelete != null" >
+        #{isdelete,jdbcType=INTEGER},
+      </if>
+      <if test="categoryid != null" >
+        #{categoryid,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.example.model.Tasklist" >
+    update tasklist
+    <set >
+      <if test="finished != null" >
+        finished = #{finished,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="bite != null" >
+        bite = #{bite,jdbcType=INTEGER},
+      </if>
+      <if test="url != null" >
+        url = #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="isdelete != null" >
+        isdelete = #{isdelete,jdbcType=INTEGER},
+      </if>
+    </set>
+    where 1=1
+      <if test="fmid != null" >
+        and fmid = #{fmid,jdbcType=INTEGER}
+      </if>
+      <if test="categoryid != null" >
+        and categoryid = #{categoryid,jdbcType=VARCHAR}
+      </if>
+       <if test="fmid != null" >
+        and fmid = #{fmid,jdbcType=INTEGER}
+      </if>
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.example.model.Tasklist" >
+    update tasklist
+    set fmid = #{fmid,jdbcType=INTEGER},
+      finished = #{finished,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      bite = #{bite,jdbcType=INTEGER},
+      url = #{url,jdbcType=VARCHAR},
+      isdelete = #{isdelete,jdbcType=INTEGER},
+      categoryid = #{categoryid,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

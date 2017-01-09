@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Comment">
+	<!--<cache></cache>-->
+	<resultMap id="RM_Comment" type="com.example.model.Comment">
+		<result property="id" column="id"/>
+		<result property="fatherId" column="father_id"/>
+		<result property="comment" column="comment"/>
+		<result property="creatorId" column="creator_id"/>
+		<result property="createTime" column="create_time"/>
+		<result property="postId" column="post_id"/>
+		<result property="floorId" column="floor_id"/>
+ 	</resultMap>
+	<insert id="ist" useGeneratedKeys="true" keyProperty="id">
+		insert into
+		m_comment(comment,father_id,post_id,create_time,update_time,creator_id,floor_id) 
+		values(#{comment,jdbcType=VARCHAR},#{fatherId,jdbcType=INTEGER},#{postId,jdbcType=INTEGER},now(),now(),#{creatorId,jdbcType=INTEGER},#{floorId,jdbcType=INTEGER})
+	</insert>
+	<select id="find" parameterType="com.example.model.Page"
+		resultType="com.example.model.Comment" resultMap="RM_Comment">
+		select * from m_comment where 1=1
+		<if test="params.id!=null and params.id!=''">
+		   and id=#{params.id}
+		</if>
+		<if test="params.postId!=null and params.postId!=''">
+		   and post_id=#{params.postId}
+		</if>
+		<if test="params.fatherId!=null and params.fatherId!=''">
+		   and father_id=#{params.fatherId}
+		</if>
+		<if test="params.floorId!=null and params.floorId!=''">
+		   and floor_id=#{params.floorId}
+		</if>
+		order by create_time desc
+	</select>
+	
+</mapper>

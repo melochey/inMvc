@@ -1,0 +1,127 @@
+.living-wrap {
+    position: fixed;
+    z-index: 2;
+    top: 60px;
+    left: 10px;
+    right: 10px;
+    bottom: 50px;
+    padding: 0 12px 0 12px;
+}
+.title{
+	padding: 0 12px 0 12px;
+	margin:0 10px;
+	position:relative;
+	height:50px;
+}
+.welcome{
+	text-align: center;
+	line-height:50px;
+	font-family: Helvetica;
+    font-size: 20px;
+    color: #66625B;
+    word-wrap: break-word;
+    word-break: break-all;
+}
+.fmid{
+	color:#F54747;
+}
+.category{
+	color:#F54747;
+}
+.date{
+	position:absolute;
+	bottom:2px;
+	right:24px;
+	line-height:20px;
+	font-size: 14px;
+    color: #66625B;
+    font-family: Helvetica;
+    word-wrap: break-word;
+    word-break: break-all;
+}
+.bubble {
+    line-height: 21px;
+    position: relative;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    padding: 8px 8px;
+    max-width: 395px;
+    font-family: Helvetica;
+    font-size: 15px;
+    color: #66625B;
+    color: rgba(255, 255, 255, 0.8);
+    line-height: 17px;
+    margin-left: 38px;
+    margin-bottom: 16px;
+    margin-top: 20px;
+    display: inline-block;
+    word-wrap: break-word;
+    word-break: break-all;
+}
+
+.bubble .avatar {
+    position: absolute;
+    top: -22px;
+    left: -38px;
+    height: 32px;
+    width: 32px;
+    border-radius: 16px;
+    overflow: hidden;
+}
+
+.bubble .avatar img {
+    height: 32px;
+    width: 32px;
+}
+
+.bubble .name {
+    width: 315px;
+    position: absolute;
+    top: -20px;
+    left: 0px;
+    line-height: 17px;
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.7);
+}
+#liveComment{
+	/* background: url(../img/bk2.jpg) center top; */
+	height: 100%;
+	overflow: auto;
+	padding:20px 20px;
+	border-top: 4px solid #F54747;
+	border-bottom: 4px solid #F54747;
+	background-color: rgb(7, 131, 51);
+}
+.online {
+	position:absolute;
+	right:40px;
+	top:10px;
+	font-family: Helvetica;
+    font-size: 15px;
+    color: #66625B;
+    color: rgba(255, 255, 255, 0.9);
+}
+.bkpic{
+	position:absolute;
+	top:10px;
+	left:10px;
+	display:block
+}
+.bkpic span{
+	background-color: #F54747;
+	font-size: 14px;
+    color: #FFF;
+    text-align: center;
+    padding:8px 12px;
+    cursor:pointer
+}
+.colorPanel{
+	position:absolute;
+	top:22px;
+	z-index:1000;
+	width: 240px;
+	display:none;
+}
+.colorPanel div{float:left}
+#picker { width: 200px; height: 200px }
+#slide { width: 30px; height: 200px }

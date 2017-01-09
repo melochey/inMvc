@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="LivingWords" >
+  <resultMap id="BaseResultMap" type="com.example.model.LivingWords" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="url" property="url" jdbcType="VARCHAR" />
+    <result column="comment" property="comment" jdbcType="VARCHAR" />
+    <result column="create_tiem" property="createTiem" jdbcType="TIMESTAMP" />
+    <result column="fm_id" property="fmid" jdbcType="INTEGER" />
+	<result column="category_id" property="categoryId" jdbcType="VARCHAR" />
+    <result column="num" property="num" jdbcType="INTEGER" />
+    <result column="userid" property="userid" jdbcType="BIGINT" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, name, url, comment, create_tiem, fm_id, category_id,userid
+  </sql>
+  <select id="find" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from livingwords
+    where 1=1
+    <if test="params.fmid!=null">
+    	and fm_id=#{params.fmid}
+    </if>
+    <if test="params.categoryid!=null">
+    	and category_id=#{params.categoryid}
+    </if>
+  </select>
+  <select id="searchCommentsByUser" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from livingwords
+    where 1=1
+    <if test="params.fmid!=null">
+    	and fm_id=#{params.fmid}
+    </if>
+    <if test="params.categoryid!=null">
+    	and category_id=#{params.categoryid}
+    </if>
+    <if test="params.name!=null">
+    	and name like '%${params.name}%'
+    </if>
+     <if test="params.name==null">
+    	1=2
+    </if>
+    order by LENGTH(`comment`) desc
+  </select>
+  <select id="countUser" resultType="int">
+  	select count(distinct(name)) from livingwords
+  	 where 1=1
+    <if test="params.fmid!=null">
+    	and fm_id=#{params.fmid}
+    </if>
+    <if test="params.categoryid!=null">
+    	and category_id=#{params.categoryid}
+    </if>
+  </select>
+  <select id="countSex" resultType="java.util.Map">
+  	  SELECT COUNT(a.id)as num,a.sex as sex from appuser a ,(SELECT DISTINCT(userid)as uid from livingwords where 1=1
+  	  <if test="fmid!=null">
+    	and fm_id=#{fmid}
+      </if> 
+      <if test="categoryid!=null">
+    	and category_id=#{categoryid}
+      </if> 
+  	)b where a.userid=b.uid GROUP BY a.sex
+  </select>
+  <select id="totalSex" resultType="java.util.Map">
+	  SELECT COUNT(a.id)as num,b.sex as sex from livingwords a,appuser b WHERE a.userid=b.userid 
+	  <if test="fmid!=null">
+	    	and a.fm_id=#{fmid}
+	      </if> 
+	      <if test="categoryid!=null">
+	    	and a.category_id=#{categoryid}
+	   </if>  
+	   GROUP BY b.sex
+  </select>
+  <select id="mostActiviteUsers" resultMap="BaseResultMap">
+  	select s.num,s.name,s.url from (SELECT COUNT(*)as num,name,url from livingwords where 1=1
+  	<if test="params.fmid!=null">
+    	and fm_id=#{params.fmid}
+    </if> 
+    <if test="params.categoryid!=null">
+    	and category_id=#{params.categoryid}
+    </if> 
+  	 GROUP BY `name` ORDER BY num desc)s
+  </select>
+  <select id="firstCome" resultMap="BaseResultMap">
+  	SELECT DISTINCT(a.n)as name,url from (SELECT name as n,url from livingwords where  1=1 
+        <if test="params.fmid!=null">
+    	and fm_id=#{params.fmid}
+    </if> 
+    <if test="params.categoryid!=null">
+    	and category_id=#{params.categoryid}
+    </if> 
+	ORDER BY id desc)a
+  </select>
+  <select id="maxLenComment" resultMap="BaseResultMap">
+  	SELECT * from livingwords where 1=1
+  	<if test="params.fmid!=null">
+    	and fm_id=#{params.fmid}
+    </if> 
+    <if test="params.categoryid!=null">
+    	and category_id=#{params.categoryid}
+    </if> 
+    ORDER BY LENGTH(`comment`) desc
+  </select>
+  <select id="payMoneyComment" resultMap="BaseResultMap">
+  	SELECT * from livingwords where 1=1
+  	<if test="params.fmid!=null">
+    	and fm_id=#{params.fmid}
+    </if> 
+    <if test="params.categoryid!=null">
+    	and category_id=#{params.categoryid}
+    </if>  and `comment` like '%颗荔枝%'
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from livingwords
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="del" parameterType="com.example.model.LivingWords">
+  	delete from livingwords
+  	where 1=1
+  	 <if test="fmid!=null">
+    	and fm_id=#{fmid}
+    </if>
+    <if test="categoryId!=null">
+    	and category_id=#{categoryId}
+    </if>
+  </delete>
+  <insert id="ist" parameterType="com.example.model.LivingWords" >
+    insert into livingwords (id, name, url, 
+      comment, create_tiem, fm_id, 
+      category_id,userid)
+    values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{url,jdbcType=VARCHAR}, 
+      #{comment,jdbcType=VARCHAR}, #{createTiem,jdbcType=TIMESTAMP}, #{fmid,jdbcType=INTEGER}, 
+      #{categoryId,jdbcType=VARCHAR},#{userid,jdbcType=BIGINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.example.model.LivingWords" >
+    insert into livingwords
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="url != null" >
+        url,
+      </if>
+      <if test="comment != null" >
+        comment,
+      </if>
+      <if test="createTiem != null" >
+        create_tiem,
+      </if>
+      <if test="fmId != null" >
+        fm_id,
+      </if>
+      <if test="categoryId != null" >
+        category_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="url != null" >
+        #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="comment != null" >
+        #{comment,jdbcType=VARCHAR},
+      </if>
+      <if test="createTiem != null" >
+        #{createTiem,jdbcType=TIMESTAMP},
+      </if>
+      <if test="fmId != null" >
+        #{fmId,jdbcType=INTEGER},
+      </if>
+      <if test="categoryId != null" >
+        #{categoryId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.example.model.LivingWords" >
+    update livingwords
+    <set >
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="url != null" >
+        url = #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="comment != null" >
+        comment = #{comment,jdbcType=VARCHAR},
+      </if>
+      <if test="createTiem != null" >
+        create_tiem = #{createTiem,jdbcType=TIMESTAMP},
+      </if>
+      <if test="fmId != null" >
+        fm_id = #{fmId,jdbcType=INTEGER},
+      </if>
+      <if test="categoryId != null" >
+        category_id = #{categoryId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="upt" parameterType="com.example.model.LivingWords" >
+    update livingwords
+    set name = #{name,jdbcType=VARCHAR},
+      url = #{url,jdbcType=VARCHAR},
+      comment = #{comment,jdbcType=VARCHAR},
+      create_tiem = #{createTiem,jdbcType=TIMESTAMP},
+      fm_id = #{fmId,jdbcType=INTEGER},
+      category_id = #{categoryId,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
